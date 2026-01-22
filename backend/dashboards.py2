@@ -1,0 +1,26 @@
+from fastapi import APIRouter
+from backend.database import get_connection
+
+router = APIRouter(prefix="/dashboard")
+
+@router.get("/client")
+def client_dashboard(user_id: int):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM orders WHERE user_id=?", (user_id,))
+    orders = [dict(row) for row in cur.fetchall()]
+    conn.close()
+    return {"orders":orders}
+
+@router.get("/owner")
+def owner_dashboard(secret_key: str):
+    if secret_key != "OWNER_SECRET":
+        return {"status":"error","msg":"Unauthorized"}
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM orders")
+    orders = [dict(row) for row in cur.fetchall()]
+    cur.execute("SELECT * FROM users")
+    users = [dict(row) for row in cur.fetchall()]
+    conn.close()
+    return {"orders":orders,"users":users}
