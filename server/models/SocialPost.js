@@ -12,3 +12,8 @@ const socialPostSchema = mongoose.Schema({
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
+// add fields
+scheduledAt: Date,
+status: { type: String, enum: ['draft', 'scheduled', 'posted', 'failed'] },
+contentId: { type: mongoose.Schema.Types.ObjectId, ref: 'GeneratedContent' },
+platformPostIds: Map, // platform -> post ID
