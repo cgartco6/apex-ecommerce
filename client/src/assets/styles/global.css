@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-Regular.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppins-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+}
+
+:root {
+  --primary: #2A5C8F;    /* deep blue – replace */
+  --secondary: #F4F7FC;   /* light grey-blue – replace */
+  --accent: #F9A826;      /* warm orange – replace */
+  --text-dark: #333333;
+  --text-light: #ffffff;
+  --bg-light: #fafafa;
+  --font-main: 'Poppins', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-main);
+  color: var(--text-dark);
+  background-color: var(--bg-light);
+  line-height: 1.6;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--text-light);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn-primary:hover { background-color: var(--accent); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.btn-secondary:hover {
+  background: var(--primary);
+  color: var(--text-light);
+}
+
+/* Form inputs */
+input, textarea, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-family: var(--font-main);
+}
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Links */
+a { color: var(--primary); text-decoration: none; }
+a:hover { color: var(--accent); }
