@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "payout-weekly": "cd server && node services/payment/payoutScheduler.js",
+    "evolve-models": "cd server && node services/ai/orchestrator.js --evolve",
+    "schedule-posts": "cd server && node services/marketingEngine/scheduler.js",
+    "optimize-campaigns": "cd server && node services/ai/targetAI.js --optimize-all",
+    "auto-scale": "cd server && node services/scaling/autoScaler.js"
+  }
+}
