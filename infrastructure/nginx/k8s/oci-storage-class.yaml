@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: oci-bv
+provisioner: oracle.com/oci
+parameters:
+  availability-domain: "xxxx:PHX-AD-1"
+  compartment-ocid: "${compartment_ocid}"
+  volume-size: "50"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apex-data
+spec:
+  storageClassName: oci-bv
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
