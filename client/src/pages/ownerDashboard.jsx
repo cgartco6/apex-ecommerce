@@ -15,3 +15,7 @@ const OwnerDashboard = () => {
     </div>
   );
 };
+import SARSTaxReminder from '../components/ownerDashboard/SARSTaxReminder';
+
+// Inside the render, add:
+<SARSTaxReminder />
