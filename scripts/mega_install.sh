@@ -70,3 +70,10 @@ fi
 
 echo "Installation complete! Access at http://localhost"
 echo "Owner dashboard: http://localhost/payouts"
+
+# Add cron for marketing engine scheduler
+(crontab -l 2>/dev/null; echo "0 * * * * cd /opt/apex-ecommerce && npm run schedule-posts") | crontab -
+# Add cron for target AI optimisation (every 15 minutes)
+(crontab -l 2>/dev/null; echo "*/15 * * * * cd /opt/apex-ecommerce && npm run optimize-campaigns") | crontab -
+# Add cron for auto‑scaler (every minute)
+(crontab -l 2>/dev/null; echo "* * * * * cd /opt/apex-ecommerce && npm run auto-scale") | crontab -
