@@ -25,3 +25,7 @@ function spawnAgent(type, version) {
   const agent = spawn('python', [`agents/${type}_v${version}.py`]);
   agents[type] = agent;
 }
+if (balance > 5000) {
+  // Spawn a new model variant
+  trainModel('design', 'new-dataset');
+    }
