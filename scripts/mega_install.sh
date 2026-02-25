@@ -593,3 +593,23 @@ echo -e "4. Add bank details for payouts in server/config/banks.js"
 echo -e ""
 echo -e "Log file: $LOG_FILE"
 echo -e "${GREEN}========================================${NC}"
+
+# After cloning, install new dependencies
+cd /opt/apex-ecommerce/server
+npm install axios node-cron nodemailer  # for new services
+
+# Set up environment variables for AGI readiness
+echo "USE_AGI=false" >> server/.env
+echo "AGI_API_KEY=placeholder" >> server/.env
+
+# Create necessary directories
+mkdir -p server/services/ai/{core,strategic,creative,crisis,bizdev,pricing,emotional,vendor,compliance,continuous}
+
+# Set up cron for continuous learning (every hour)
+(crontab -l 2>/dev/null; echo "0 * * * * cd /opt/apex-ecommerce && npm run continuous-learn") | crontab -
+
+# Set up cron for pricing optimization (daily)
+(crontab -l 2>/dev/null; echo "0 2 * * * cd /opt/apex-ecommerce && npm run optimize-prices") | crontab -
+
+# Set up cron for compliance checks (weekly)
+(crontab -l 2>/dev/null; echo "0 3 * * 1 cd /opt/apex-ecommerce && npm run compliance-check") | crontab -
