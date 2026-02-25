@@ -7,3 +7,6 @@
     "auto-scale": "cd server && node services/scaling/autoScaler.js"
   }
 }
+"continuous-learn": "cd server && node services/ai/continuous/ContinuousLearner.js",
+"optimize-prices": "cd server && node services/ai/pricing/PricingOptimizer.js --update",
+"compliance-check": "cd server && node services/ai/compliance/ComplianceEngine.js --check-all"
