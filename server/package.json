@@ -19,3 +19,8 @@
     "nodemon": "^2.0.22"
   }
 }
+{
+  "dependencies": {
+    "oracledb": "^6.0.0"
+  }
+}
