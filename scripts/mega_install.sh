@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+set -euo pipefail
 
 # =============================================================================
 # APEX DIGITAL – Autonomous Agency Platform – Mega Installer
@@ -613,3 +614,52 @@ mkdir -p server/services/ai/{core,strategic,creative,crisis,bizdev,pricing,emoti
 
 # Set up cron for compliance checks (weekly)
 (crontab -l 2>/dev/null; echo "0 3 * * 1 cd /opt/apex-ecommerce && npm run compliance-check") | crontab -
+
+# ... (existing OS detection, dependency installation, Oracle Cloud Terraform provisioning remain) ...
+
+# -----------------------------------------------------------------------------
+# After Oracle Cloud provisioning, deploy to Afrihost cPanel (optional)
+# -----------------------------------------------------------------------------
+echo -e "${GREEN}Do you want to deploy the static frontend to Afrihost cPanel? (y/n)${NC}"
+read -r DEPLOY_AFRIHOST
+if [[ "$DEPLOY_AFRIHOST" == "y" ]]; then
+  echo -e "${GREEN}Deploying to Afrihost...${NC}"
+  # Use FTP or rsync to upload client/build to cPanel public_html
+  # This script assumes you have FTP credentials in .env
+  source /opt/apex-ecommerce/server/.env
+  lftp -c "open -u $FTP_USER,$FTP_PASS $FTP_HOST; mirror -R /opt/apex-ecommerce/client/build /public_html/apex"
+  
+  # Set up MySQL database on cPanel (via remote MySQL or API)
+  mysql -h $CPANEL_DB_HOST -u $CPANEL_DB_USER -p$CPANEL_DB_PASS < infrastructure/afrihost/cpanel_db_setup.sql
+fi
+
+# -----------------------------------------------------------------------------
+# Seed database with new collections (as before) but ensure all models are created
+# -----------------------------------------------------------------------------
+mongosh <<EOF
+use apex
+// ... (existing agency, taxrates, relocation inserts) ...
+
+// Also create default admin user if not exists
+const bcrypt = require('bcryptjs');
+const adminExists = db.users.findOne({ email: 'admin@apexdigital.co.za' });
+if (!adminExists) {
+  const hashed = bcrypt.hashSync('ChangeMe123!', 10);
+  db.users.insertOne({
+    name: 'Admin',
+    email: 'admin@apexdigital.co.za',
+    password: hashed,
+    isAdmin: true,
+    createdAt: new Date()
+  });
+}
+EOF
+
+# -----------------------------------------------------------------------------
+# Set up cron for AI tasks
+# -----------------------------------------------------------------------------
+(crontab -l 2>/dev/null; echo "0 * * * * cd /opt/apex-ecommerce && npm run evolve-models") | crontab -
+(crontab -l 2>/dev/null; echo "*/15 * * * * cd /opt/apex-ecommerce && npm run optimize-campaigns") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * cd /opt/apex-ecommerce && npm run auto-scale") | crontab -
+
+# ... (rest of the final output) ...
